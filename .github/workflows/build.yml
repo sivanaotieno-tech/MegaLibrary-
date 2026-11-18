@@ -1,0 +1,45 @@
+name: Build MegaLibrary Mihon extensions
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: megalibrary-build
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out MegaLibrary
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build the four source entries
+        run: |
+          python3 scripts/build_upstream.py
+
+      - name: Upload installable APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: MegaLibrary-Mihon-APKs
+          path: |
+            output/*.apk
+            output/THIRD_PARTY_NOTICES.txt
+            output/LICENSE
+          if-no-files-found: error
+          retention-days: 30
