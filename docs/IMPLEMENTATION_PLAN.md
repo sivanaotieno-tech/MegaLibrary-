@@ -1,35 +1,24 @@
-# MegaLibrary implementation plan
+# Implementation plan
 
-## Product target
+## Beta 1: installable source bundle
 
-One installable Mihon extension that provides a unified catalogue across the four confirmed source families:
+- Build MangaDex as a MegaLibrary-branded Mihon extension.
+- Build VIZ as one extension exposing VIZ Manga and VIZ Shonen Jump.
+- Build Read Jujutsu Kaisen Manga Online as a MegaLibrary-branded Mihon extension.
+- Keep upstream provider behaviour and access checks intact.
+- Build debug-signed APKs in GitHub Actions for device testing.
 
-1. MangaDex
-2. VIZ Manga
-3. VIZ Shonen Jump
-4. Read Jujutsu Kaisen Manga Online
+## What Beta 1 does not do
 
-## Required behaviour
+- It does not merge the four catalogues into one unified search result list.
+- It does not issue bulk-add commands to Mihon's private library database.
+- It does not bypass provider login, subscription, DRM, country, or content-rating restrictions.
+- It does not publish a Mihon repository index or a production signing key.
 
-- Search and paginate each supported catalogue within its documented/public access rules.
-- Normalize title metadata and deduplicate overlapping titles without losing source-specific identifiers.
-- Preserve the originating source for chapter listing and reading.
-- Respect VIZ authentication, subscription, regional and locked-chapter checks.
-- Respect MangaDex content ratings, API limits and attributions.
-- Handle unavailable sources independently so one provider outage does not break the others.
+## Next milestones
 
-## Mihon integration constraints
-
-A source extension cannot directly write to Mihon's private library database or command unrelated installed extensions. Library actions must use Mihon's supported source UI. No unsupported bulk-import API will be assumed.
-
-## Release requirements
-
-- Build against the compatible extension API.
-- Verify the APK package ID, signature and metadata.
-- Test installation and source discovery on Mihon 0.21.3 / Android 14.
-- Publish the APK and a compatible repository index.
-- Test adding the repository and installing/updating through Mihon's Extensions screen.
-
-## Definition of done
-
-The project is not considered released until the signed APK installs in Mihon, all four source adapters have been tested, catalogue pagination works, and provider restrictions are enforced.
+1. Verify that the APKs build successfully in GitHub Actions.
+2. Test installation and source behaviour on Mihon 0.21.3 / Android 14.
+3. Add an optional unified catalogue adapter, subject to provider APIs and terms.
+4. Investigate a supported Mihon-native bulk-add workflow; do not write to private app databases.
+5. Set up a stable signing key and publish a compatible Mihon extension repository only after signing and index generation are verified.
